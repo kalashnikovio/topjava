@@ -47,18 +47,7 @@ public class MealsUtil {
         return new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), excess);
     }
 
-    private static List<MealTo> filterByCalories(List<Meal> meals, int caloriesPerDay){
-        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
-                .collect(
-                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-                );
-
-        return meals.stream()
-                .map(meal -> createTo(meal, caloriesSumByDate.get(meal.getDate()) > DEFAULT_CALORIES_MAXIMUM))
-                .collect(Collectors.toList());
-    }
-
-    public static List<MealTo> getMealTo(List<Meal> meals, int caloriesMaximum) {
-        return filterByCalories(meals, caloriesMaximum);
+    public static List<MealTo> getMealTos(List<Meal> meals, int caloriesMaximum) {
+        return filteredByStreams(meals, LocalTime.of(0,0), LocalTime.of(23, 59), caloriesMaximum);
     }
 }
