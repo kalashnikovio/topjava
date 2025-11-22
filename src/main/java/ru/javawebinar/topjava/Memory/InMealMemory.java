@@ -30,7 +30,7 @@ public class InMealMemory implements MealMemory {
 
     @Override
     public Meal save(Meal meal) {
-        if (meal.getId() == 0){
+        if (meal.getId() == null){
             meal.setId(idCounter.getAndIncrement());
             meals.put(meal.getId(), meal);
             return meal;

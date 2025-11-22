@@ -37,6 +37,7 @@ public class MealServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
+        Meal meal;
         if (action == null) {
             log.info("all meals");
             request.setAttribute("meals",
@@ -52,7 +53,13 @@ public class MealServlet extends HttpServlet {
                     break;
                 case "update":
                     log.info("update meal");
-                    Meal meal =  mealMemory.get(Integer.parseInt(request.getParameter("id")));
+                    meal =  mealMemory.get(Integer.parseInt(request.getParameter("id")));
+                    request.setAttribute("meal", meal);
+                    request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                    break;
+                case "create":
+                    log.info("create meal");
+                    meal = new Meal(null, LocalDateTime.now(), "", 0);
                     request.setAttribute("meal", meal);
                     request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                     break;

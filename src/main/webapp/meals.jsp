@@ -19,6 +19,7 @@
     }
 </style>
 
+<a href="meals?action=create">Добавить</a>
 <table border="1">
     <caption>Список еды</caption>
     <tr>
