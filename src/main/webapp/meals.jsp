@@ -25,6 +25,8 @@
         <th>Дата и время</th>
         <th>Описание</th>
         <th>Количество калорий</th>
+        <th></th>
+        <th></th>
     </tr>
     <c:forEach items="${requestScope.meals}" var="meal">
         <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.MealTo"/>
@@ -32,6 +34,8 @@
             <td>${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}</td>
             <td>${meal.description}</td>
             <td>${meal.calories}</td>
+            <td><a href="meals?action=update&id=${meal.id}">Обновить</a></td>
+            <td><a href="meals?action=delete&id=${meal.id}">Удалить</a></td>
         </tr>
     </c:forEach>
 </table>
