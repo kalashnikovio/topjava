@@ -13,7 +13,7 @@
         <input type="hidden" name="id" value="${meal.id}">
         <dl>
             <dt>Дата и время</dt>
-            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" required></dd>
+            <dd><input type="datetime-local" value="${meal.dateTime}" name="dateTime" step="60" required></dd>
         </dl>
         <dl>
             <dt>Описание:</dt>
