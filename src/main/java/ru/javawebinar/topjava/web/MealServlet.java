@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -39,33 +40,32 @@ public class MealServlet extends HttpServlet {
         String action = request.getParameter("action");
 
         Meal meal;
-        if (action == null || action.isEmpty()) {
-            log.info("all meals");
-            request.setAttribute("meals",
-                    MealsUtil.getMealTos(inMemoryMealRepository.getAll(), MealsUtil.DEFAULT_CALORIES_MAXIMUM));
-            request.getRequestDispatcher("/meals.jsp").forward(request, response);
-        } else {
-            switch (action) {
-                case "delete":
-                    int id = Integer.parseInt(request.getParameter("id"));
-                    inMemoryMealRepository.delete(id);
-                    log.info("delete meal");
-                    response.sendRedirect("meals");
-                    break;
-                case "update":
-                    log.info("update meal");
-                    meal = inMemoryMealRepository.get(Integer.parseInt(request.getParameter("id")));
-                    request.setAttribute("meal", meal);
-                    request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
-                    break;
-                case "create":
-                    log.info("create meal");
-                    meal = new Meal(null, LocalDateTime.now(), "", 0);
-                    request.setAttribute("meal", meal);
-                    request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
-                    break;
-            }
+        switch (action == null ? "allMeals" : action) {
+            case "delete":
+                int id = Integer.parseInt(request.getParameter("id"));
+                inMemoryMealRepository.delete(id);
+                log.info("delete meal");
+                response.sendRedirect("meals");
+                break;
+            case "update":
+                log.info("update meal");
+                meal = inMemoryMealRepository.get(Integer.parseInt(request.getParameter("id")));
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            case "create":
+                log.info("create meal");
+                meal = new Meal(null, LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 0);
+                request.setAttribute("meal", meal);
+                request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+                break;
+            default:
+                log.info("all meals");
+                request.setAttribute("meals",
+                        MealsUtil.getMealTos(inMemoryMealRepository.getAll(), MealsUtil.DEFAULT_CALORIES_MAXIMUM));
+                request.getRequestDispatcher("/meals.jsp").forward(request, response);
         }
+
 
     }
 }
