@@ -31,11 +31,9 @@ public class InMemoryMealRepository implements MealRepository {
     public Meal save(Meal meal) {
         if (meal.getId() == null) {
             meal.setId(idCounter.incrementAndGet());
-        } else if (!meals.containsKey(meal.getId())) {
-            return null;
+            meals.put(meal.getId(), meal);
         }
-        meals.put(meal.getId(), meal);
-        return meal;
+        return meals.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
