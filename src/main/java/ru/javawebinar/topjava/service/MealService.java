@@ -1,10 +1,10 @@
 package ru.javawebinar.topjava.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFound;
@@ -36,5 +36,9 @@ public class MealService {
 
     public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
+    }
+
+    public List<Meal> getBetween(LocalDate startDate, LocalDate endDate, int userId) {
+        return repository.getBetween(startDate, endDate, userId);
     }
 }
