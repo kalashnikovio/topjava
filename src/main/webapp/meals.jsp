@@ -14,12 +14,39 @@
         .excess {
             color: red;
         }
+
+        .inline-container {
+            display: flex;
+            vertical-align: middle;
+            margin-right: 10px;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
 <section>
     <h3><a href="index.html">Home</a></h3>
     <hr/>
+    <form method="get" action="meals">
+        <input type="hidden" name="action" value="filter">
+        <div class="inline-container">
+            <label>От даты (включая):</label>
+            <input type="date" name="startDate" value="${param.startDate}">
+        </div>
+        <div class="inline-container">
+            <label>До даты (включая):</label>
+            <input type="date" name="endDate" value="${param.endDate}">
+        </div>
+        <div class="inline-container">
+            <label>От времени (включая):</label>
+            <input type="time" name="startTime" value="${param.startTime}">
+        </div>
+        <div class="inline-container">
+            <label>До времени (исключая):</label>
+            <input type="time" name="endTime" value="${param.endTime}">
+        </div>
+        <button type="submit">Отфильтровать</button>
+    </form>
     <h2>Meals</h2>
     <a href="meals?action=create">Add Meal</a>
     <br><br>

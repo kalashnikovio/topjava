@@ -28,9 +28,9 @@ public class InMemoryMealRepository implements MealRepository {
 
     {
         MealsUtil.meals.forEach(meal -> save(meal, USER_ID));
-        save(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0),
+        save(new Meal(LocalDateTime.of(2025, Month.DECEMBER, 30, 10, 0),
                 "Завтрак ADMIN", 500), ADMIN_ID);
-        save(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0),
+        save(new Meal(LocalDateTime.of(2025, Month.DECEMBER, 30, 13, 0),
                 "Обед ADMIN", 1000), ADMIN_ID);
     }
 
@@ -71,7 +71,7 @@ public class InMemoryMealRepository implements MealRepository {
     public List<Meal> getBetween(LocalDate startDate, LocalDate endDate, int userId) {
         Map<Integer, Meal> meals = usersMeals.get(userId);
 
-        return meals.values().stream()
+        return meals == null ? Collections.emptyList() : meals.values().stream()
                 .filter(meal -> DateTimeUtil.isBetweenDate(meal.getDate(), startDate, endDate))
                 .collect(Collectors.toList());
     }

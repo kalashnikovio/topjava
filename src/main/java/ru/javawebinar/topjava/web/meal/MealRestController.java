@@ -18,8 +18,8 @@ import static ru.javawebinar.topjava.util.ValidationUtil.checkIsNew;
 
 @Controller
 public class MealRestController {
-    private final MealService service;
     private static final Logger log = LoggerFactory.getLogger(MealRestController.class);
+    private final MealService service;
 
     public MealRestController(MealService service) {
         this.service = service;
@@ -64,6 +64,8 @@ public class MealRestController {
                 startDate, endDate, startTime, endTime, userId);
 
         List<Meal> mealsDateFiltered = service.getBetween(startDate, endDate, userId);
-        return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime);
+        return MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(),
+                startTime == null ? LocalTime.MIN : startTime,
+                endTime == null ? LocalTime.MAX : endTime);
     }
 }
