@@ -87,4 +87,19 @@ public class MealServiceTest {
     public void getNotFound() {
         assertThrows(NotFoundException.class, () -> service.get(NOT_FOUND, USER_ID));
     }
+
+    @Test
+    public void deleteNotOwn() {
+        assertThrows(NotFoundException.class, () -> service.delete(MEAL1_ID, ADMIN_ID));
+    }
+
+    @Test
+    public void getNotOwn() {
+        assertThrows(NotFoundException.class, () -> service.get(MEAL1_ID, ADMIN_ID));
+    }
+
+    @Test
+    public void updateNotOwn() {
+        assertThrows(NotFoundException.class, () -> service.update(meal1, ADMIN_ID));
+    }
 }
