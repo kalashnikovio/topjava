@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,6 +34,7 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class MealServiceTest {
     private static final StringBuilder results = new StringBuilder();
+    private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
     @Autowired
     private MealService service;
@@ -40,15 +43,16 @@ public class MealServiceTest {
     public final Stopwatch stopwatch = new Stopwatch() {
         @Override
         protected void finished(long nanos, Description description) {
-            String result = String.format("\n%-25s %7d", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
+            String result = String.format("\n%-25s %7d %1s",
+                    description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos), "ms");
             results.append(result);
-            System.out.print(result + "\n");
+            log.info(result);
         }
     };
 
     @AfterClass
     public static void printResult() {
-        System.out.print(results + "\n");
+        log.info(String.valueOf(results));
     }
 
     @Test
