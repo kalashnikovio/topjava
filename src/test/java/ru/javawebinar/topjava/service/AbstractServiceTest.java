@@ -19,6 +19,7 @@ import ru.javawebinar.topjava.TimingRules;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
@@ -42,7 +43,9 @@ public abstract class AbstractServiceTest {
     protected <T extends Throwable> void validateRootCause(Class<T> rootExceptionClass, Runnable runnable) {
         assertThatExceptionOfType(Throwable.class)
                 .isThrownBy(runnable::run)
-                .withRootCauseInstanceOf(rootExceptionClass);
+                .satisfiesAnyOf(
+                        ex -> assertThat(ex).isInstanceOf(rootExceptionClass),
+                        ex -> assertThat(ex).hasRootCauseInstanceOf(rootExceptionClass));
     }
 
     public boolean isJpaBased() {
