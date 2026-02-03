@@ -49,6 +49,7 @@ public class JdbcUserRepository implements UserRepository {
         if (user.isNew()) {
             Number newKey = insertUser.executeAndReturnKey(parameterSource);
             user.setId(newKey.intValue());
+            insertRoles(user);
         } else {
             if (namedParameterJdbcTemplate.update("""
                        UPDATE users SET name=:name, email=:email, password=:password, 
@@ -60,6 +61,21 @@ public class JdbcUserRepository implements UserRepository {
             insertRoles(user);
         }
         return user;
+    }
+
+    private void deleteRoles(User user) {
+        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", user.getId());
+    }
+
+    private void insertRoles(User user) {
+        Set<Role> roles = user.getRoles();
+        if (!CollectionUtils.isEmpty(roles)) {
+            jdbcTemplate.batchUpdate("INSERT INTO user_role (user_id, role) VALUES (?, ?)", roles, roles.size(),
+                    (ps, role) -> {
+                        ps.setInt(1, user.id());
+                        ps.setString(2, role.name());
+                    });
+        }
     }
 
     @Override
@@ -81,6 +97,14 @@ public class JdbcUserRepository implements UserRepository {
         return setRoles(DataAccessUtils.singleResult(users));
     }
 
+    private User setRoles(User user) {
+        if (user != null) {
+            List<Role> roles = jdbcTemplate.queryForList("SELECT role FROM user_role  WHERE user_id=?", Role.class, user.getId());
+            user.setRoles(roles);
+        }
+        return user;
+    }
+
     @Override
     public List<User> getAll() {
         List<User> users = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
@@ -92,28 +116,5 @@ public class JdbcUserRepository implements UserRepository {
         });
         users.forEach(u -> u.setRoles(map.get(u.getId())));
         return users;
-    }
-
-    private void deleteRoles(User user) {
-        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", user.getId());
-    }
-
-    private void insertRoles(User user) {
-        Set<Role> roles = user.getRoles();
-        if (!CollectionUtils.isEmpty(roles)) {
-            jdbcTemplate.batchUpdate("INSERT INTO user_role (user_id, role) VALUES (?, ?)", roles, roles.size(),
-                    (ps, role) -> {
-                        ps.setInt(1, user.id());
-                        ps.setString(2, role.name());
-                    });
-        }
-    }
-
-    private User setRoles(User user) {
-        if (user != null) {
-            List<Role> roles = jdbcTemplate.queryForList("SELECT role FROM user_role  WHERE user_id=?", Role.class, user.getId());
-            user.setRoles(roles);
-        }
-        return user;
     }
 }
