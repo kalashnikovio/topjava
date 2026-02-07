@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.model.Role;
@@ -15,6 +17,7 @@ import java.util.Set;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
@@ -84,5 +87,18 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
+    }
+
+    @Test
+    public void a1update() {
+        User updated = getUpdated();
+        service.update(updated);
+        USER_MATCHER.assertMatch(service.getAll(), admin, guest, getUpdated());
+    }
+
+    @Test
+    public void a2getAll() {
+        List<User> all = service.getAll();
+        USER_MATCHER.assertMatch(all, admin, guest, user);
     }
 }
