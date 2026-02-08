@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -19,9 +18,8 @@ import java.util.Set;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.UserTestData.*;
 
-@ContextConfiguration({"classpath:spring/hibernate.xml"})
+@ContextConfiguration({"classpath:spring/spring-cache.xml"})
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
