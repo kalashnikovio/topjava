@@ -6,3 +6,4 @@ log
 *.patch
 
 
+/config/REST-Topjava-soapui-project.xml
