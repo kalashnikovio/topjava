@@ -24,10 +24,10 @@
     </mvc:annotation-driven>
 
     <bean class="org.springframework.format.support.FormattingConversionServiceFactoryBean" id="conversionService">
-        <property name="converters">
+        <property name="formatters">
             <set>
-                <bean class="ru.javawebinar.topjava.web.converter.DateConverter"/>
-                <bean class="ru.javawebinar.topjava.web.converter.TimeConverter"/>
+                <bean class="ru.javawebinar.topjava.web.converter.DateConverterFormatter"/>
+                <bean class="ru.javawebinar.topjava.web.converter.TimeConverterFormatter"/>
             </set>
         </property>
     </bean>
