@@ -12,7 +12,7 @@ public class Profiles {
 
     public static final String ACTIVE_DB = POSTGRES_DB;
     public static final String REPOSITORY_IMPLEMENTATION = JPA;
-//    public static final String REPOSITORY_IMPLEMENTATION = DATAJPA;
+    public static final String REPOSITORY_IMPLEMENTATION_DATAJPA = DATAJPA;
 
     //  Get DB profile depending of DB driver in classpath
     public static String getActiveDbProfile() {

@@ -23,7 +23,7 @@ import javax.annotation.PostConstruct;
 //@WebAppConfiguration
 //@ExtendWith(SpringExtension.class)
 @Transactional
-@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.REPOSITORY_IMPLEMENTATION)
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.REPOSITORY_IMPLEMENTATION_DATAJPA)
 public abstract class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
