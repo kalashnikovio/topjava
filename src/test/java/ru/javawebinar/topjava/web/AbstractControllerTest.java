@@ -1,6 +1,8 @@
 package ru.javawebinar.topjava.web;
 
+import org.junit.jupiter.api.Assumptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,6 +17,8 @@ import ru.javawebinar.topjava.Profiles;
 
 import javax.annotation.PostConstruct;
 
+import static ru.javawebinar.topjava.Profiles.DATAJPA;
+
 @SpringJUnitWebConfig(locations = {
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-mvc.xml",
@@ -23,7 +27,7 @@ import javax.annotation.PostConstruct;
 //@WebAppConfiguration
 //@ExtendWith(SpringExtension.class)
 @Transactional
-@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.REPOSITORY_IMPLEMENTATION_DATAJPA)
+@ActiveProfiles(resolver = ActiveDbProfileResolver.class, profiles = Profiles.REPOSITORY_IMPLEMENTATION)
 public abstract class AbstractControllerTest {
 
     private static final CharacterEncodingFilter CHARACTER_ENCODING_FILTER = new CharacterEncodingFilter();
@@ -34,6 +38,9 @@ public abstract class AbstractControllerTest {
     }
 
     private MockMvc mockMvc;
+
+    @Autowired
+    private Environment env;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -48,5 +55,9 @@ public abstract class AbstractControllerTest {
 
     protected ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {
         return mockMvc.perform(builder);
+    }
+
+    protected void isDataJpa() {
+        Assumptions.assumeTrue(env.acceptsProfiles(DATAJPA));
     }
 }
