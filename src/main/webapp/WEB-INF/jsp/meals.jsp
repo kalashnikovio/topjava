@@ -33,7 +33,14 @@
                 </div>
             </div>
         </form>
-        <button type="submit"><spring:message code="meal.filter"/></button>
+        <div class="text-left">
+            <button class="button" onclick="ctx.updateTable()">
+                <spring:message code="meal.filter"/>
+            </button>
+            <button class="button" onclick="clearFilter()">
+                <spring:message code="common.cancel"/>
+            </button>
+        </div>
         <hr>
         <button class="button" onclick="add()">
             <spring:message code="common.add"/>
