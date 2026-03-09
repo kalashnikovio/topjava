@@ -15,6 +15,8 @@ function enable(chkbox, id) {
         const section = chkbox.closest("tr");
         section.attr("user-enabled", enabled);
         successNoty("Done");
+    }).fail(function () {
+        chkbox.prop("checked", !enabled);
     });
 }
 

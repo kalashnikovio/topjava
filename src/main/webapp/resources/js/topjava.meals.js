@@ -1,23 +1,19 @@
-const userAjaxUrl = "profile/meals/";
+const mealAjaxUrl = "profile/meals/";
 
 const ctx = {
-    ajaxUrl: userAjaxUrl,
+    ajaxUrl: mealAjaxUrl,
     updateTable: function () {
         $.ajax({
             type: "GET",
             url: "profile/meals/filter",
             data: $("#filter").serialize()
-        }).done(updateTableMeals);
+        }).done(updateTableData);
     }
 };
 
-function updateTableMeals(data) {
-    ctx.datatableApi.clear().rows.add(data).draw();
-}
-
 function clearFilter() {
     $("#filter")[0].reset();
-    $.get(userAjaxUrl, updateTableMeals);
+    $.get(mealAjaxUrl, updateTableData);
 }
 
 $(function () {
