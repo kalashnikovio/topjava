@@ -65,28 +65,58 @@ $(function () {
         })
     );
 
-    $('#startDate').datetimepicker({
+    var startDate = $('#startDate');
+    var endDate = $('#endDate');
+    startDate.datetimepicker({
         timepicker: false,
         format: 'Y-m-d',
         formatDate: 'Y-m-d',
+        onShow: function(ct) {
+            this.setOptions({
+                maxDate: endDate.val() ? endDate.val().split(' ')[0] : false
+            })
+        }
     });
 
-    $('#endDate').datetimepicker({
+    endDate.datetimepicker({
         timepicker: false,
         format: 'Y-m-d',
         formatDate: 'Y-m-d',
+        onShow: function(ct) {
+            this.setOptions({
+                minDate: startDate.val() ? startDate.val().split(' ')[0] : false,
+                minTime: startDate.val() ? startDate.val().split(' ')[1] : false
+            })
+        }
     });
 
-    $('#startTime').datetimepicker({
+    var startTime = $('#startTime');
+    var endTime = $('#endTime');
+    startTime.datetimepicker({
         datepicker: false,
         format: 'H:i',
         step: 1,
+        onShow: function() {
+            this.setOptions({
+                maxTime: endTime.val() ? endTime.val() : false
+            })
+        },
+        onChangeDateTime: function(dp, $input) {
+            endTime.datetimepicker({
+                minTime: $input.val() ? $input.val() : false
+            });
+        }
     });
 
-    $('#endTime').datetimepicker({
+    endTime.datetimepicker({
         datepicker: false,
         format: 'H:i',
         step: 1,
+        onShow: function() {
+            this.setOptions({
+                minTime: startTime.val() ? startTime.val() : false
+            })
+        }
     });
 
     $('#dateTime').datetimepicker({
