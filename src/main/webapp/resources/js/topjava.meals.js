@@ -71,9 +71,9 @@ $(function () {
         timepicker: false,
         format: 'Y-m-d',
         formatDate: 'Y-m-d',
-        onShow: function(ct) {
+        onShow: function () {
             this.setOptions({
-                maxDate: endDate.val() ? endDate.val().split(' ')[0] : false
+                maxDate: endDate.val() ? endDate.val() : false
             })
         }
     });
@@ -82,10 +82,9 @@ $(function () {
         timepicker: false,
         format: 'Y-m-d',
         formatDate: 'Y-m-d',
-        onShow: function(ct) {
+        onShow: function () {
             this.setOptions({
-                minDate: startDate.val() ? startDate.val().split(' ')[0] : false,
-                minTime: startDate.val() ? startDate.val().split(' ')[1] : false
+                minDate: startDate.val() ? startDate.val() : false,
             })
         }
     });
@@ -96,23 +95,18 @@ $(function () {
         datepicker: false,
         format: 'H:i',
         step: 1,
-        onShow: function() {
+        onShow: function () {
             this.setOptions({
                 maxTime: endTime.val() ? endTime.val() : false
             })
         },
-        onChangeDateTime: function(dp, $input) {
-            endTime.datetimepicker({
-                minTime: $input.val() ? $input.val() : false
-            });
-        }
     });
 
     endTime.datetimepicker({
         datepicker: false,
         format: 'H:i',
         step: 1,
-        onShow: function() {
+        onShow: function () {
             this.setOptions({
                 minTime: startTime.val() ? startTime.val() : false
             })
