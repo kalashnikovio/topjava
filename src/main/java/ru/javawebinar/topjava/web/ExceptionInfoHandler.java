@@ -28,6 +28,7 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 @Order(Ordered.HIGHEST_PRECEDENCE + 5)
 public class ExceptionInfoHandler {
     public static final String EXCEPTION_DUPLICATE_EMAIL = "exception.user.duplicateEmail";
+    public static final String EXCEPTION_DUPLICATE_DATETIME = "exception.meal.duplicateDateTime";
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
     //  http://stackoverflow.com/a/22358422/548473
@@ -55,6 +56,16 @@ public class ExceptionInfoHandler {
         return logAndGetErrorInfo(req, e, true, APP_ERROR);
     }
 
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(BindException.class)
+    public static ErrorInfo bindValidationError(HttpServletRequest req, BindException bindException) {
+        String[] details = bindException.getFieldErrors().stream()
+                .map(fieldError -> String.format("[%s] %s", fieldError.getField(), fieldError.getDefaultMessage()))
+                .toArray(String[]::new);
+
+        return logAndGetErrorInfo(req, bindException, false, VALIDATION_ERROR, details);
+    }
+
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
     private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String... details) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
@@ -65,15 +76,5 @@ public class ExceptionInfoHandler {
         }
         String[] errorInfoDetails = details.length != 0 ? details : new String[]{getMessage(rootCause)};
         return new ErrorInfo(req.getRequestURL(), errorType, errorInfoDetails);
-    }
-
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(BindException.class)
-    public static ErrorInfo bindValidationError(HttpServletRequest req, BindException bindException) {
-        String[] details = bindException.getFieldErrors().stream()
-                .map(fieldError -> String.format("[%s] %s", fieldError.getField(), fieldError.getDefaultMessage()))
-                .toArray(String[]::new);
-
-        return logAndGetErrorInfo(req, bindException, false, VALIDATION_ERROR, details);
     }
 }

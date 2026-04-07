@@ -26,5 +26,15 @@
                 </button>
             </form:form>
         </sec:authorize>
+        <div class="nav-item dropdown">
+            <a class="btn btn-secondary dropdown-toggle" data-toggle="dropdown">${pageContext.response.locale}</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="${requestScope['javax.servlet.forward.request_uri']}?lang=en">English</a>
+                <a class="dropdown-item" href="${requestScope['javax.servlet.forward.request_uri']}?lang=ru">Русский</a>
+            </div>
+        </div>
     </div>
 </nav>
+<script type="text/javascript">
+    var localeCode = "${pageContext.response.locale}";
+</script>
