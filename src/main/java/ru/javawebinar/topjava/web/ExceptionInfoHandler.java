@@ -2,6 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,6 +33,12 @@ public class ExceptionInfoHandler {
     public static final String EXCEPTION_DUPLICATE_DATETIME = "exception.meal.duplicateDateTime";
     private static final Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
+    private final MessageSource messageSource;
+
+    public ExceptionInfoHandler(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(NotFoundException.class)
@@ -41,6 +49,13 @@ public class ExceptionInfoHandler {
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+        String message = ValidationUtil.getRootCause(e).getMessage();
+        if (message != null) {
+            if (message.contains("users_unique_email_idx")) {
+                return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR,
+                        messageSource.getMessage(EXCEPTION_DUPLICATE_EMAIL, null, LocaleContextHolder.getLocale()));
+            }
+        }
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
