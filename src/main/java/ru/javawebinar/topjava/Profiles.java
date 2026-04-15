@@ -8,7 +8,8 @@ public class Profiles {
             POSTGRES_DB = "postgres",
             HSQL_DB = "hsqldb",
             JPA = "jpa",
-            DATAJPA = "datajpa";
+            DATAJPA = "datajpa",
+            VDS = "vds";
 
     public static final String ACTIVE_DB = POSTGRES_DB;
     public static final String REPOSITORY_IMPLEMENTATION = JPA;
